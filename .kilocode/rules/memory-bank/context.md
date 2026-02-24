@@ -24,6 +24,7 @@ Full-featured data marketplace with black/terminal aesthetic, ASCII art hero, fr
   - Purchase API for premium datasets (`/api/purchase`)
   - Seed API to populate DB (`/api/seed`)
   - Drizzle ORM + SQLite database with `datasets` and `purchases` tables
+- [x] **Red navigation menu** — sticky top navbar with Home, Search, Login, Sign Up links in red terminal style; mobile hamburger included
 
 ## Current Structure
 
