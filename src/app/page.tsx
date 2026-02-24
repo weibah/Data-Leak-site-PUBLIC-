@@ -47,15 +47,15 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Nav anchors */}
-      <nav className="border-b border-green-900 px-6 py-3 flex gap-6 text-xs font-mono text-green-600 sticky top-0 bg-black z-10">
+      {/* Section anchors */}
+      <div className="border-b border-green-900 px-6 py-3 flex gap-6 text-xs font-mono text-green-600">
         <a href="#free" className="hover:text-green-300 transition-colors uppercase tracking-widest">
           ▸ Free Data
         </a>
         <a href="#premium" className="hover:text-yellow-400 transition-colors uppercase tracking-widest">
           ▸ Premium Data
         </a>
-      </nav>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col gap-20">
 
