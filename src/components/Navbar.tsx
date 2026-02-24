@@ -1,15 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getSession, clearSession } from "@/lib/auth";
 
 export function Navbar() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  // Lazy initializer reads localStorage only on the client during first render
-  const [loggedIn, setLoggedIn] = useState(() => !!getSession());
+  // Use useEffect to avoid hydration mismatch - only check localStorage on client
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    setLoggedIn(!!getSession());
+  }, []);
 
   function handleLogout() {
     clearSession();
@@ -55,8 +61,8 @@ export function Navbar() {
             </Link>
           ))}
 
-          {/* Profile button — only when logged in */}
-          {loggedIn && (
+          {/* Profile button — only when logged in and mounted */}
+          {loggedIn && mounted && (
             <>
               <Link
                 href="/profile"
@@ -136,8 +142,8 @@ export function Navbar() {
             </Link>
           ))}
 
-          {/* Profile + Logout — mobile, only when logged in */}
-          {loggedIn && (
+          {/* Profile + Logout — mobile, only when logged in and mounted */}
+          {loggedIn && mounted && (
             <>
               <Link
                 href="/profile"
