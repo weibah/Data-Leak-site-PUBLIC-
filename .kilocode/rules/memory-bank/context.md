@@ -30,6 +30,8 @@ Full-featured data marketplace with black/terminal aesthetic, ASCII art hero, fr
 - [x] **Signup page** — `/signup` route with terminal-style form (email + password + confirm), green/black aesthetic, password match validation, placeholder registration flow
 - [x] **Upload tab** — golden `▲ Upload` nav link after Sign Up; `/upload` page with ASCII "UPLOAD" hero, gold/black aesthetic, dataset submission form (title, description, category, tier, file drop zone)
 - [x] **Recent Uploads board** — cyan-themed leaderboard-style list on home page showing the 25 most recently added datasets (index, tier badge, title, description, tags, row count, date); appears above the Free/Premium sections with its own nav anchor
+- [x] **File format support** — Added .txt, .zip, .rar file support to upload page in addition to existing CSV/JSON support
+- [x] **Database configuration fix** — Fixed build issue by switching from cloud database (@kilocode/app-builder-db) to local SQLite using @libsql/client and drizzle-orm
 
 ## Current Structure
 
@@ -73,3 +75,4 @@ After migrations run automatically in sandbox, call `POST /api/seed` once to pop
 | Initial | Template created with base setup |
 | 2026-02-24 | BrokenData marketplace built — ASCII hero, free/premium datasets, purchase flow, DB |
 | 2026-02-24 | Added Recent Uploads board (top 25 by createdAt desc) to home page |
+| 2026-02-24 | Fixed build by switching from cloud DB to local SQLite; Added .txt/.zip/.rar file upload support |
