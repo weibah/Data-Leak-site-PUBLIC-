@@ -138,7 +138,7 @@ export default function ProfilePage() {
 
           {/* Status bar */}
           <div className="border border-t-0 border-green-900 px-4 py-1.5 flex justify-between text-green-900 text-xs font-mono">
-            <span>brokendata.io</span>
+            <span>brokendata.to</span>
             <span>session active</span>
           </div>
         </div>
