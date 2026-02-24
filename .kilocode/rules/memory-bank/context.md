@@ -25,6 +25,7 @@ Full-featured data marketplace with black/terminal aesthetic, ASCII art hero, fr
   - Seed API to populate DB (`/api/seed`)
   - Drizzle ORM + SQLite database with `datasets` and `purchases` tables
 - [x] **Red navigation menu** — sticky top navbar with Home, Search, Login, Sign Up links in red terminal style; mobile hamburger included
+- [x] **Search page** — `/search` route with keyword search input, tier filter (all/free/premium), category filter buttons, results grid using DatasetCard; backed by `/api/search` GET endpoint with SQLite LIKE queries
 
 ## Current Structure
 
