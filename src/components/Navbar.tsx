@@ -2,16 +2,35 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { getSession, clearSession } from "@/lib/auth";
 
 export function Navbar() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  // Lazy initializer reads localStorage only on the client during first render
+  const [loggedIn, setLoggedIn] = useState(() => !!getSession());
 
-  const links = [
+  function handleLogout() {
+    clearSession();
+    setLoggedIn(false);
+    setOpen(false);
+    router.push("/");
+  }
+
+  const guestLinks = [
     { label: "Home", href: "/" },
     { label: "Search", href: "/search" },
     { label: "Login", href: "/login" },
     { label: "Sign Up", href: "/signup" },
   ];
+
+  const authLinks = [
+    { label: "Home", href: "/" },
+    { label: "Search", href: "/search" },
+  ];
+
+  const links = loggedIn ? authLinks : guestLinks;
 
   return (
     <header className="bg-black border-b border-red-900 sticky top-0 z-50">
@@ -35,6 +54,40 @@ export function Navbar() {
               ▸ {link.label}
             </Link>
           ))}
+
+          {/* Profile button — only when logged in */}
+          {loggedIn && (
+            <>
+              <Link
+                href="/profile"
+                className="font-mono text-xs uppercase tracking-widest px-3 py-1 border transition-colors"
+                style={{
+                  color: "#4ade80",
+                  borderColor: "#166534",
+                  textShadow: "0 0 6px #4ade8066",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color = "#86efac";
+                  (e.currentTarget as HTMLAnchorElement).style.borderColor = "#4ade80";
+                  (e.currentTarget as HTMLAnchorElement).style.textShadow = "0 0 10px #4ade80aa";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color = "#4ade80";
+                  (e.currentTarget as HTMLAnchorElement).style.borderColor = "#166534";
+                  (e.currentTarget as HTMLAnchorElement).style.textShadow = "0 0 6px #4ade8066";
+                }}
+              >
+                ◈ Profile
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="text-red-600 font-mono text-xs uppercase tracking-widest hover:text-red-400 transition-colors border border-transparent hover:border-red-800 px-2 py-1"
+              >
+                ✕ Logout
+              </button>
+            </>
+          )}
+
           {/* Upload — golden accent tab */}
           <Link
             href="/upload"
@@ -82,6 +135,27 @@ export function Navbar() {
               ▸ {link.label}
             </Link>
           ))}
+
+          {/* Profile + Logout — mobile, only when logged in */}
+          {loggedIn && (
+            <>
+              <Link
+                href="/profile"
+                onClick={() => setOpen(false)}
+                className="font-mono text-xs uppercase tracking-widest px-6 py-3 border-b border-green-900 transition-colors hover:bg-green-950/20"
+                style={{ color: "#4ade80" }}
+              >
+                ◈ Profile
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="text-left text-red-600 font-mono text-xs uppercase tracking-widest px-6 py-3 border-b border-red-900 hover:bg-red-950/20 transition-colors"
+              >
+                ✕ Logout
+              </button>
+            </>
+          )}
+
           {/* Upload — golden accent (mobile) */}
           <Link
             href="/upload"

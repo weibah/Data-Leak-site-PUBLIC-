@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { setSession } from "@/lib/auth";
 
 export default function SignupPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -22,11 +25,11 @@ export default function SignupPage() {
 
     setStatus("loading");
 
-    // Placeholder — no real auth yet
+    // Simulate registration — store session and redirect to profile
     setTimeout(() => {
-      setStatus("error");
-      setErrorMsg("Registration not yet implemented.");
-    }, 800);
+      setSession(email);
+      router.push("/profile");
+    }, 600);
   }
 
   return (

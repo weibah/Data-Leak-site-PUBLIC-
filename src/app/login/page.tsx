@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { setSession } from "@/lib/auth";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
@@ -14,11 +17,16 @@ export default function LoginPage() {
     setStatus("loading");
     setErrorMsg("");
 
-    // Placeholder — no real auth yet
+    // Simulate auth — store session and redirect to profile
     setTimeout(() => {
-      setStatus("error");
-      setErrorMsg("Authentication not yet implemented.");
-    }, 800);
+      if (!email || !password) {
+        setStatus("error");
+        setErrorMsg("Please enter your email and password.");
+        return;
+      }
+      setSession(email);
+      router.push("/profile");
+    }, 600);
   }
 
   return (
