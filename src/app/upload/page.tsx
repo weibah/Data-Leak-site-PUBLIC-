@@ -1,4 +1,10 @@
+"use client";
+
+import { useRef } from "react";
+
 export default function UploadPage() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <main className="min-h-screen bg-black text-green-400 font-mono flex flex-col items-center px-4 py-16">
       {/* ASCII art header */}
@@ -98,6 +104,7 @@ export default function UploadPage() {
           <div
             className="border-2 border-dashed flex flex-col items-center justify-center py-8 cursor-pointer hover:bg-yellow-950 transition-colors"
             style={{ borderColor: "#B8860B" }}
+            onClick={() => fileInputRef.current?.click()}
           >
             <span className="text-2xl mb-2" style={{ color: "#FFD700" }}>
               ▲
@@ -108,7 +115,12 @@ export default function UploadPage() {
             >
               Drop file here or click to browse
             </span>
-            <input type="file" accept=".csv,.json" className="hidden" />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".csv,.json"
+              className="hidden"
+            />
           </div>
         </div>
 
