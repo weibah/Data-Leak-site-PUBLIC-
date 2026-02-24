@@ -99,7 +99,7 @@ export default function UploadPage() {
             className="text-xs uppercase tracking-widest"
             style={{ color: "#FFD700" }}
           >
-            Upload File (CSV / JSON)
+            Upload File (CSV / JSON / TXT / ZIP / RAR)
           </label>
           <div
             className="border-2 border-dashed flex flex-col items-center justify-center py-8 cursor-pointer hover:bg-yellow-950 transition-colors"
@@ -118,7 +118,7 @@ export default function UploadPage() {
             <input
               ref={fileInputRef}
               type="file"
-              accept=".csv,.json"
+              accept=".csv,.json,.txt,.zip,.rar"
               className="hidden"
             />
           </div>
