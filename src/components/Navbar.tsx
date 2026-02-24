@@ -35,6 +35,28 @@ export function Navbar() {
               ▸ {link.label}
             </Link>
           ))}
+          {/* Upload — golden accent tab */}
+          <Link
+            href="/upload"
+            className="font-mono text-xs uppercase tracking-widest px-3 py-1 border transition-colors"
+            style={{
+              color: "#FFD700",
+              borderColor: "#B8860B",
+              textShadow: "0 0 6px #FFD70088",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.color = "#FFF176";
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = "#FFD700";
+              (e.currentTarget as HTMLAnchorElement).style.textShadow = "0 0 10px #FFD700cc";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.color = "#FFD700";
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = "#B8860B";
+              (e.currentTarget as HTMLAnchorElement).style.textShadow = "0 0 6px #FFD70088";
+            }}
+          >
+            ▲ Upload
+          </Link>
         </nav>
 
         {/* Mobile hamburger */}
@@ -60,6 +82,15 @@ export function Navbar() {
               ▸ {link.label}
             </Link>
           ))}
+          {/* Upload — golden accent (mobile) */}
+          <Link
+            href="/upload"
+            onClick={() => setOpen(false)}
+            className="font-mono text-xs uppercase tracking-widest px-6 py-3 border-b border-yellow-900 transition-colors"
+            style={{ color: "#FFD700" }}
+          >
+            ▲ Upload
+          </Link>
         </nav>
       )}
     </header>

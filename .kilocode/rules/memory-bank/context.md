@@ -28,6 +28,7 @@ Full-featured data marketplace with black/terminal aesthetic, ASCII art hero, fr
 - [x] **Search page** — `/search` route with keyword search input, tier filter (all/free/premium), results grid using DatasetCard; backed by `/api/search` GET endpoint with SQLite LIKE queries (category filter removed)
 - [x] **Login page** — `/login` route with terminal-style form (email + password), green/black aesthetic, placeholder auth flow
 - [x] **Signup page** — `/signup` route with terminal-style form (email + password + confirm), green/black aesthetic, password match validation, placeholder registration flow
+- [x] **Upload tab** — golden `▲ Upload` nav link after Sign Up; `/upload` page with ASCII "UPLOAD" hero, gold/black aesthetic, dataset submission form (title, description, category, tier, file drop zone)
 
 ## Current Structure
 
