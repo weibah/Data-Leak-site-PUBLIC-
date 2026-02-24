@@ -17,19 +17,16 @@ interface Dataset {
   createdAt: Date | null;
 }
 
-const CATEGORIES = ["All", "Finance", "Health", "Social", "Science", "Technology", "Environment", "Demographics"];
-
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [tier, setTier] = useState("all");
-  const [category, setCategory] = useState("");
   const [results, setResults] = useState<Dataset[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [searched, setSearched] = useState(false);
 
   const runSearch = useCallback(
-    async (q: string, t: string, cat: string) => {
+    async (q: string, t: string) => {
       setLoading(true);
       setError("");
       setSearched(true);
@@ -37,7 +34,6 @@ export default function SearchPage() {
         const params = new URLSearchParams();
         if (q) params.set("q", q);
         if (t !== "all") params.set("tier", t);
-        if (cat && cat !== "All") params.set("category", cat);
 
         const res = await fetch(`/api/search?${params.toString()}`);
         if (!res.ok) throw new Error("Search failed");
@@ -55,17 +51,12 @@ export default function SearchPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    runSearch(query, tier, category);
+    runSearch(query, tier);
   };
 
   const handleTierChange = (newTier: string) => {
     setTier(newTier);
-    if (searched) runSearch(query, newTier, category);
-  };
-
-  const handleCategoryChange = (newCat: string) => {
-    setCategory(newCat);
-    if (searched) runSearch(query, tier, newCat);
+    if (searched) runSearch(query, newTier);
   };
 
   return (
@@ -134,29 +125,6 @@ export default function SearchPage() {
                 </button>
               ))}
             </div>
-
-            {/* Category filter */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-green-700 text-xs font-mono uppercase tracking-widest">Category:</span>
-              {CATEGORIES.map((cat) => {
-                const val = cat === "All" ? "" : cat;
-                const active = category === val;
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => handleCategoryChange(val)}
-                    className={`text-xs font-mono px-2 py-1 border uppercase tracking-widest transition-colors ${
-                      active
-                        ? "border-green-500 bg-green-500 text-black"
-                        : "border-green-900 text-green-700 hover:border-green-600 hover:text-green-400"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
-            </div>
           </div>
         </form>
 
@@ -188,7 +156,7 @@ export default function SearchPage() {
   ╚══════════════════════════════╝`}
             </pre>
             <p className="text-green-800 text-xs font-mono">
-              search by keyword, filter by tier or category
+              search by keyword, filter by tier
             </p>
           </div>
         )}
