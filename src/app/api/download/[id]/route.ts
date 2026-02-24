@@ -7,6 +7,10 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!db) {
+    return NextResponse.json({ error: "Database not available" }, { status: 503 });
+  }
+
   const { id } = await params;
   const datasetId = parseInt(id, 10);
 

@@ -2,8 +2,17 @@ import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import * as schema from "./schema";
 
-const client = createClient({
-  url: "file:./data.db",
-});
+let db: any;
 
-export const db = drizzle(client, { schema });
+try {
+  const client = createClient({
+    url: process.env.DATABASE_URL || "file:./data.db",
+  });
+  db = drizzle(client, { schema });
+} catch (error) {
+  console.error("Database connection failed:", error);
+  // Return a mock db for graceful degradation
+  db = null;
+}
+
+export { db };

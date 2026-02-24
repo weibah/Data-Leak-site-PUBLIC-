@@ -11,11 +11,15 @@ export default async function Home() {
   let recentUploads: typeof datasets.$inferSelect[] = [];
 
   try {
+    if (!db) {
+      throw new Error("Database not available");
+    }
     freeData = await db.select().from(datasets).where(eq(datasets.tier, "free"));
     premiumData = await db.select().from(datasets).where(eq(datasets.tier, "premium"));
     recentUploads = await db.select().from(datasets).orderBy(desc(datasets.createdAt)).limit(25);
-  } catch {
-    // DB not yet migrated — show empty state
+  } catch (error) {
+    console.error("Database query failed:", error);
+    // DB not available — show empty state
   }
 
   return (

@@ -6,6 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  if (!db) {
+    return NextResponse.json({ error: "Database not available" }, { status: 503 });
+  }
+
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q")?.trim() ?? "";
   const tier = searchParams.get("tier") ?? "all";

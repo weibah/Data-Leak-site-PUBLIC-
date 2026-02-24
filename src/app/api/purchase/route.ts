@@ -4,6 +4,10 @@ import { datasets, purchases } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
+  if (!db) {
+    return NextResponse.json({ error: "Database not available" }, { status: 503 });
+  }
+
   try {
     const body = await req.json();
     const { datasetId, email } = body;

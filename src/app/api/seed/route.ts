@@ -137,6 +137,10 @@ const premiumDatasets = [
 ];
 
 export async function POST() {
+  if (!db) {
+    return NextResponse.json({ error: "Database not available" }, { status: 503 });
+  }
+
   try {
     // Check if already seeded
     const existing = await db.select().from(datasets);
