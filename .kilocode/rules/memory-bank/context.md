@@ -1,10 +1,10 @@
-# Active Context: Next.js Starter Template
+# Active Context: BrokenData Marketplace
 
 ## Current State
 
-**Template Status**: ✅ Ready for development
+**App Status**: ✅ BrokenData data marketplace — live and deployed
 
-The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. It's ready for AI-assisted expansion to build any type of application.
+Full-featured data marketplace with black/terminal aesthetic, ASCII art hero, free dataset downloads, and premium dataset purchase flow backed by SQLite via Drizzle ORM.
 
 ## Recently Completed
 
@@ -14,74 +14,55 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 - [x] ESLint configuration
 - [x] Memory bank documentation
 - [x] Recipe system for common features
+- [x] **BrokenData marketplace** — full implementation:
+  - ASCII art "BrokenData" hero on black background
+  - Green terminal / hacker aesthetic throughout
+  - Free datasets section (3 sample datasets)
+  - Premium datasets section (4 sample datasets, with pricing)
+  - DatasetCard component with expandable data preview table
+  - Download API for free datasets (`/api/download/[id]`)
+  - Purchase API for premium datasets (`/api/purchase`)
+  - Seed API to populate DB (`/api/seed`)
+  - Drizzle ORM + SQLite database with `datasets` and `purchases` tables
 
 ## Current Structure
 
 | File/Directory | Purpose | Status |
 |----------------|---------|--------|
-| `src/app/page.tsx` | Home page | ✅ Ready |
-| `src/app/layout.tsx` | Root layout | ✅ Ready |
+| `src/app/page.tsx` | Home page with ASCII hero + dataset grid | ✅ Ready |
+| `src/app/layout.tsx` | Root layout — black bg, mono font | ✅ Ready |
 | `src/app/globals.css` | Global styles | ✅ Ready |
+| `src/components/DatasetCard.tsx` | Dataset card with preview + purchase/download | ✅ Ready |
+| `src/app/api/download/[id]/route.ts` | Free dataset download endpoint | ✅ Ready |
+| `src/app/api/purchase/route.ts` | Premium dataset purchase endpoint | ✅ Ready |
+| `src/app/api/seed/route.ts` | DB seed endpoint (POST to populate) | ✅ Ready |
+| `src/db/schema.ts` | Drizzle schema: datasets + purchases | ✅ Ready |
+| `src/db/index.ts` | DB client | ✅ Ready |
+| `src/db/migrate.ts` | Migration runner | ✅ Ready |
+| `src/db/seed.ts` | CLI seed script | ✅ Ready |
+| `drizzle.config.ts` | Drizzle Kit config | ✅ Ready |
 | `.kilocode/` | AI context & recipes | ✅ Ready |
 
-## Current Focus
+## Database Schema
 
-The template is ready. Next steps depend on user requirements:
+### `datasets` table
+- `id`, `title`, `description`, `category`
+- `tier` — "free" | "premium"
+- `price` — null for free, number for premium
+- `previewData` — JSON string (3 sample rows shown in UI)
+- `fullData` — JSON string (full data for free; note for premium)
+- `recordCount`, `tags` (JSON array), `createdAt`
 
-1. What type of application to build
-2. What features are needed
-3. Design/branding preferences
+### `purchases` table
+- `id`, `datasetId` (FK), `buyerEmail`, `amount`, `purchasedAt`
 
-## Quick Start Guide
+## Seeding
 
-### To add a new page:
-
-Create a file at `src/app/[route]/page.tsx`:
-```tsx
-export default function NewPage() {
-  return <div>New page content</div>;
-}
-```
-
-### To add components:
-
-Create `src/components/` directory and add components:
-```tsx
-// src/components/ui/Button.tsx
-export function Button({ children }: { children: React.ReactNode }) {
-  return <button className="px-4 py-2 bg-blue-600 text-white rounded">{children}</button>;
-}
-```
-
-### To add a database:
-
-Follow `.kilocode/recipes/add-database.md`
-
-### To add API routes:
-
-Create `src/app/api/[route]/route.ts`:
-```tsx
-import { NextResponse } from "next/server";
-
-export async function GET() {
-  return NextResponse.json({ message: "Hello" });
-}
-```
-
-## Available Recipes
-
-| Recipe | File | Use Case |
-|--------|------|----------|
-| Add Database | `.kilocode/recipes/add-database.md` | Data persistence with Drizzle + SQLite |
-
-## Pending Improvements
-
-- [ ] Add more recipes (auth, email, etc.)
-- [ ] Add example components
-- [ ] Add testing setup recipe
+After migrations run automatically in sandbox, call `POST /api/seed` once to populate datasets.
 
 ## Session History
 
 | Date | Changes |
 |------|---------|
 | Initial | Template created with base setup |
+| 2026-02-24 | BrokenData marketplace built — ASCII hero, free/premium datasets, purchase flow, DB |
