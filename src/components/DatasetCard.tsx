@@ -82,7 +82,7 @@ export function DatasetCard({ dataset }: DatasetCardProps) {
 
       {/* Stats */}
       <div className="flex gap-4 text-xs text-green-700 font-mono">
-        <span>▸ {dataset.recordCount.toLocaleString()} records</span>
+        <span>▸ {dataset.recordCount} records</span>
         <span>▸ {tags.length} tags</span>
       </div>
 
@@ -128,7 +128,7 @@ export function DatasetCard({ dataset }: DatasetCardProps) {
             </tbody>
           </table>
           <p className="text-green-800 text-xs px-3 py-2 font-mono">
-            showing {preview.length} of {dataset.recordCount.toLocaleString()} records
+            showing {preview.length} of {dataset.recordCount} records
           </p>
         </div>
       )}
