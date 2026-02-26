@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(
-      { error: "Failed to upload dataset" },
+      { error: "Failed to upload dataset", details: String(error) },
       { status: 500 }
     );
   }
