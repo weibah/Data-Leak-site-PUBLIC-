@@ -3,6 +3,10 @@ import { db } from "@/db";
 import { datasets } from "@/db/schema";
 
 export async function POST(request: Request) {
+  if (!db) {
+    return NextResponse.json({ error: "Database not available" }, { status: 503 });
+  }
+
   try {
     const body = await request.json();
     
