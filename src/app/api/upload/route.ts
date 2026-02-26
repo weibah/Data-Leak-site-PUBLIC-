@@ -3,12 +3,22 @@ import { db } from "@/db";
 import { datasets } from "@/db/schema";
 
 export async function POST(request: Request) {
+  console.log("Upload API called");
+  
   if (!db) {
+    console.log("Database not available");
     return NextResponse.json({ error: "Database not available" }, { status: 503 });
   }
 
   try {
     const body = await request.json();
+    console.log("Request body received:", { 
+      title: body.title, 
+      description: body.description, 
+      category: body.category,
+      tier: body.tier,
+      hasFile: !!body.fullData && body.fullData !== "[]"
+    });
     
     const { 
       title, 
@@ -31,17 +41,19 @@ export async function POST(request: Request) {
     }
 
     // Insert the new dataset into the database
+    console.log("Inserting dataset into database...");
     const newDataset = await db.insert(datasets).values({
       title,
       description,
       category,
       tier,
       price: price || null,
-      previewData: previewData || "[]",
-      fullData: fullData || "[]",
-      recordCount: recordCount || 0,
+      previewData: previewData || "[]", // Maps to preview_data in DB
+      fullData: fullData || "[]",       // Maps to full_data in DB
+      recordCount: recordCount || 0,    // Maps to record_count in DB
       tags: tags ? JSON.stringify(tags) : "[]",
     }).returning();
+    console.log("Dataset inserted successfully:", newDataset[0]);
 
     return NextResponse.json({ 
       success: true, 
