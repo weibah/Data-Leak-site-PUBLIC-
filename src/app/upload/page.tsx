@@ -127,7 +127,8 @@ export default function UploadPage() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to upload dataset");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.details || errorData.error || `Server error: ${response.status}`);
       }
 
       const result = await response.json();
@@ -159,9 +160,10 @@ export default function UploadPage() {
 
     } catch (error) {
       console.error("Upload error:", error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to upload dataset. Please try again.";
       setMessage({ 
         type: "error", 
-        text: "Failed to upload dataset. Please try again." 
+        text: errorMessage 
       });
     } finally {
       setIsSubmitting(false);
