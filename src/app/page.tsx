@@ -2,138 +2,10 @@ import { DatasetCard } from "@/components/DatasetCard";
 
 export const dynamic = "force-dynamic";
 
-// Static fallback data for when database is unavailable
-const fallbackFreeData = [
-  {
-    id: 1,
-    title: "Global Temperature Records",
-    description: "Historical global temperature data from 1880-2024",
-    category: "Environment",
-    tier: "free" as const,
-    price: null,
-    previewData: JSON.stringify([
-      { year: "2020", temp: "1.02°C", source: "NASA" },
-      { year: "2021", temp: "0.85°C", source: "NOAA" },
-      { year: "2022", temp: "0.89°C", source: "MetOffice" }
-    ]),
-    fullData: "[]",
-    recordCount: 145,
-    tags: JSON.stringify(["climate", "temperature", "historical"]),
-    createdAt: new Date("2024-01-15")
-  },
-  {
-    id: 2,
-    title: "Cryptocurrency Transactions",
-    description: "Sample of Bitcoin and Ethereum transaction data",
-    category: "Finance",
-    tier: "free" as const,
-    price: null,
-    previewData: JSON.stringify([
-      { date: "2024-01-01", btc_vol: "25,430", eth_vol: "12,890" },
-      { date: "2024-01-02", btc_vol: "28,120", eth_vol: "14,201" },
-      { date: "2024-01-03", btc_vol: "22,890", eth_vol: "11,450" }
-    ]),
-    fullData: "[]",
-    recordCount: 5230,
-    tags: JSON.stringify(["crypto", "bitcoin", "ethereum", "blockchain"]),
-    createdAt: new Date("2024-02-20")
-  },
-  {
-    id: 3,
-    title: "Social Media Sentiment",
-    description: "Twitter sentiment analysis on tech companies",
-    category: "Analytics",
-    tier: "free" as const,
-    price: null,
-    previewData: JSON.stringify([
-      { company: "Tesla", sentiment: "42% positive", mentions: 12500 },
-      { company: "Apple", sentiment: "68% positive", mentions: 8900 },
-      { company: "Microsoft", sentiment: "71% positive", mentions: 6700 }
-    ]),
-    fullData: "[]",
-    recordCount: 89000,
-    tags: JSON.stringify(["sentiment", "social media", "analytics"]),
-    createdAt: new Date("2024-03-10")
-  }
-];
-
-const fallbackPremiumData = [
-  {
-    id: 101,
-    title: "Enterprise Financial Dataset",
-    description: "Comprehensive financial data for Fortune 500 companies",
-    category: "Finance",
-    tier: "premium" as const,
-    price: 299,
-    previewData: JSON.stringify([
-      { company: "AAPL", revenue: "383.29B", profit: "97.00B" },
-      { company: "MSFT", revenue: "211.92B", profit: "72.36B" },
-      { company: "GOOGL", revenue: "282.84B", profit: "73.80B" }
-    ]),
-    fullData: "[]",
-    recordCount: 2500,
-    tags: JSON.stringify(["fortune500", "financial", "enterprise"]),
-    createdAt: new Date("2024-01-05")
-  },
-  {
-    id: 102,
-    title: "Healthcare Patient Records",
-    description: "Anonymized patient data for medical research",
-    category: "Healthcare",
-    tier: "premium" as const,
-    price: 499,
-    previewData: JSON.stringify([
-      { age_group: "18-25", conditions: 145, patients: 2340 },
-      { age_group: "26-35", conditions: 189, patients: 3100 },
-      { age_group: "36-45", conditions: 223, patients: 2890 }
-    ]),
-    fullData: "[]",
-    recordCount: 15000,
-    tags: JSON.stringify(["healthcare", "medical", "patient data", "research"]),
-    createdAt: new Date("2024-02-15")
-  },
-  {
-    id: 103,
-    title: "E-commerce Purchase History",
-    description: "Complete purchase patterns from major retailers",
-    category: "Retail",
-    tier: "premium" as const,
-    price: 349,
-    previewData: JSON.stringify([
-      { category: "Electronics", avg_order: 189.99, volume: 45000 },
-      { category: "Clothing", avg_order: 67.50, volume: 89000 },
-      { category: "Home & Garden", avg_order: 124.30, volume: 34000 }
-    ]),
-    fullData: "[]",
-    recordCount: 125000,
-    tags: JSON.stringify(["ecommerce", "retail", "purchase data", "consumer"]),
-    createdAt: new Date("2024-03-01")
-  },
-  {
-    id: 104,
-    title: "Real Estate Market Data",
-    description: "Property values and market trends across major cities",
-    category: "Real Estate",
-    tier: "premium" as const,
-    price: 399,
-    previewData: JSON.stringify([
-      { city: "New York", avg_price: "1,250,000", yoy_change: "+5.2%" },
-      { city: "Los Angeles", avg_price: "985,000", yoy_change: "+3.8%" },
-      { city: "Chicago", avg_price: "425,000", yoy_change: "+2.1%" }
-    ]),
-    fullData: "[]",
-    recordCount: 8500,
-    tags: JSON.stringify(["real estate", "property", "housing", "market trends"]),
-    createdAt: new Date("2024-03-20")
-  }
-];
-
 export default async function Home() {
-  let freeData = fallbackFreeData;
-  let premiumData = fallbackPremiumData;
-  let recentUploads = [...fallbackFreeData, ...fallbackPremiumData].sort((a, b) => 
-    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  ).slice(0, 25);
+  let freeData: any[] = [];
+  let premiumData: any[] = [];
+  let recentUploads: any[] = [];
 
   // Try to fetch from database if available
   try {
@@ -146,14 +18,13 @@ export default async function Home() {
       const dbPremiumData = await db.select().from(datasets).where(eq(datasets.tier, "premium"));
       const dbRecentUploads = await db.select().from(datasets).orderBy(desc(datasets.createdAt)).limit(25);
 
-      // Only use database data if it has content
-      if (dbFreeData.length > 0) freeData = dbFreeData;
-      if (dbPremiumData.length > 0) premiumData = dbPremiumData;
-      if (dbRecentUploads.length > 0) recentUploads = dbRecentUploads;
+      freeData = dbFreeData;
+      premiumData = dbPremiumData;
+      recentUploads = dbRecentUploads;
     }
   } catch (error) {
-    console.log("Database unavailable, using fallback data");
-    // Use fallback data
+    console.log("Database unavailable, using empty state");
+    // Use empty arrays - no fallback data
   }
 
   return (
