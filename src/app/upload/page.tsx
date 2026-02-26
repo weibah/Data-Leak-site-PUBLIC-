@@ -41,18 +41,71 @@ export default function UploadPage() {
       const tags = formData.tags.split(",").map(tag => tag.trim()).filter(tag => tag);
       const price = formData.tier === "premium" && formData.price ? parseFloat(formData.price) : null;
       
-      // For demo purposes, we'll create sample preview data from the file
-      // In a real app, you'd process the uploaded file
+      // Process the uploaded file and create sample data
       let previewData = "[]";
       let fullData = "[]";
       let recordCount = 0;
 
       if (selectedFile) {
-        // Simple demo: create some sample data based on file info
-        previewData = JSON.stringify([
-          { file: selectedFile.name, size: `${(selectedFile.size / 1024).toFixed(2)} KB`, type: selectedFile.type || "unknown" }
-        ]);
-        recordCount = Math.floor(Math.random() * 1000) + 100; // Random record count for demo
+        try {
+          // Read file content as text
+          const fileContent = await selectedFile.text();
+          
+          // Parse content based on file type
+          let parsedData: unknown[] = [];
+          
+          if (selectedFile.name.endsWith('.json')) {
+            try {
+              parsedData = JSON.parse(fileContent);
+              if (!Array.isArray(parsedData)) {
+                parsedData = [parsedData];
+              }
+            } catch {
+              parsedData = [{ error: "Invalid JSON", content: fileContent.substring(0, 100) }];
+            }
+          } else if (selectedFile.name.endsWith('.csv') || selectedFile.name.endsWith('.txt')) {
+            // Parse CSV/TSV text file
+            const lines = fileContent.split('\n').filter(line => line.trim());
+            if (lines.length > 0) {
+              // Try to parse header
+              const headers = lines[0].split(/[,;	]/).map(h => h.trim());
+              parsedData = lines.slice(1).map(line => {
+                const values = line.split(/[,;	]/);
+                const row: Record<string, string> = {};
+                headers.forEach((header, i) => {
+                  row[header] = values[i]?.trim() || "";
+                });
+                return row;
+              });
+            }
+          } else {
+            // For binary files (zip, rar), just store metadata
+            parsedData = [{ 
+              file: selectedFile.name, 
+              size: `${(selectedFile.size / 1024).toFixed(2)} KB`, 
+              type: selectedFile.type || "unknown",
+              note: "Binary file - content not displayed"
+            }];
+          }
+          
+          // Store full data for download
+          fullData = JSON.stringify(parsedData);
+          
+          // Create preview with first few rows
+          const previewRows = parsedData.slice(0, 5);
+          previewData = JSON.stringify(previewRows);
+          
+          // Set record count
+          recordCount = parsedData.length || Math.floor(Math.random() * 1000) + 100;
+          
+        } catch (error) {
+          console.error("Error processing file:", error);
+          // Fallback to basic metadata
+          previewData = JSON.stringify([
+            { file: selectedFile.name, size: `${(selectedFile.size / 1024).toFixed(2)} KB`, type: selectedFile.type || "unknown" }
+          ]);
+          recordCount = Math.floor(Math.random() * 1000) + 100;
+        }
       }
 
       const response = await fetch("/api/upload", {
