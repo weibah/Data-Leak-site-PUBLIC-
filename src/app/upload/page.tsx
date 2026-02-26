@@ -126,8 +126,11 @@ export default function UploadPage() {
         }),
       });
 
+      console.log("Upload response status:", response.status);
+      
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        console.error("Upload failed:", errorData);
         throw new Error(errorData.details || errorData.error || `Server error: ${response.status}`);
       }
 
